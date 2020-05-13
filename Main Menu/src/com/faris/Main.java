@@ -1,7 +1,7 @@
 package com.faris;
 
 import java.util.*;
-import java.io.IOException;
+import java.io.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -22,40 +22,58 @@ public class Main {
             System.out.println("4.\tUbah Menu");
             System.out.println("5.\tHapus Menu");
 
-            System.out.print("\n\nPilihan Anda (1~5): ");
+            System.out.print("\n\nPilih (1~5): ");
             pilihanUser = userInputTerminal.next();
 
+            //switch with input string
             switch (pilihanUser){
                 case "1":
-                    System.out.println("DAFTAR MENU\n");
+                    System.out.println("DAFTAR MENU");
+                    tampilkanData();
                     break;
                 case "2":
-                    System.out.println("CARI MENU\n");
+                    System.out.println("CARI MENU");
+                    tampilkanData();
                     break;
                 case "3":
-                    System.out.println("TAMBAH MENU\n");
+                    System.out.println("TAMBAH MENU");
+                    tampilkanData();
                     break;
                 case "4":
-                    System.out.println("UBAH MENU\n");
+                    System.out.println("UBAH MENU");
+                    tampilkanData();
                     break;
                 case "5":
-                    System.out.println("HAPUS MENU\n");
+                    System.out.println("HAPUS MENU");
+                    tampilkanData();
                     break;
                 default:
                     System.err.println("INPUT SALAH!\n");
             }
             //Jika user pilih n maka akan keluar dari program.
-            System.out.print("Lanjutkan (y/n)?");
-            pilihanUser = userInputTerminal.next();
 
-            is_continue = pilihanUser.equalsIgnoreCase("y");
+            is_continue = getYesOrNo("Lanjutkan");
 
-        }
+        } //end-while
 
     }
 
     private static void tampilkanData() throws IOException{
+        System.out.println("*DATA DITAMPILKAN DISINI*\n");
+    }
 
+    private static boolean getYesOrNo(String message){
+        Scanner userInputTerminal = new Scanner(System.in);
+        System.out.print(message + " (y/n)? ");
+        String pilihanUser = userInputTerminal.next();
+
+        while(!pilihanUser.equalsIgnoreCase("y") && !pilihanUser.equalsIgnoreCase("n")){
+            System.out.println("\npilihan anda salah!");
+            System.out.print(message + " (y/n)? ");
+            pilihanUser = userInputTerminal.next();
+        }
+
+        return pilihanUser.equalsIgnoreCase("y");
     }
 
     private static void clearScreen(){
