@@ -1,0 +1,4 @@
+1,Nasi Goreng,15000
+2,Ketupat Sayur,15000
+3,Nasi Uduk,10000
+4,Gado-gado,15000
