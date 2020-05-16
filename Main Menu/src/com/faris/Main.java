@@ -33,34 +33,28 @@ public class Main {
                     break;
                 case "2":
                     System.out.println("CARI MENU");
-                    tampilkanData();
                     break;
                 case "3":
                     System.out.println("TAMBAH MENU");
-                    tampilkanData();
                     break;
                 case "4":
                     System.out.println("UBAH MENU");
-                    tampilkanData();
                     break;
                 case "5":
                     System.out.println("HAPUS MENU");
-                    tampilkanData();
                     break;
                 default:
                     System.err.println("INPUT SALAH!\n");
             }
             //Jika user pilih n maka akan keluar dari program.
 
-            is_continue = getYesOrNo("Lanjutkan");
+            is_continue = getYesOrNo("\nLanjutkan");
 
         } //end-while
 
     }
 
-    private static void tampilkanData() throws IOException{
-        System.out.println("*DATA DITAMPILKAN DISINI*\n");
-    }
+
 
     private static boolean getYesOrNo(String message){
         Scanner userInputTerminal = new Scanner(System.in);
@@ -86,6 +80,73 @@ public class Main {
         } catch (Exception e){
             System.err.println("Tidak bisa reload");
         }
+    }
+
+    private static void tampilkanData() throws IOException{
+        FileReader fileInput;
+        BufferedReader bufferedInput;
+
+        try {
+            fileInput = new FileReader("db.txt");
+            bufferedInput = new BufferedReader(fileInput);
+        } catch (Exception e){
+            System.out.println("Database tidak ditemukan");
+            System.out.println("Silakan update data terlebih dahulu");
+            return;
+        }
+
+        //mengambil data per-baris dr file yg diinput ke BufferedReader
+        String data = bufferedInput.readLine();
+
+        String a = "\n| No |\tNama Menu\t|\tHarga\t|";
+
+        //penutup tabel atas
+        System.out.println(a);
+        System.out.print("+  ");
+        for (int i = 0; i < a.length(); i++){
+            System.out.print("-");
+        }
+        System.out.print("\t+");
+
+
+        //mengambil data sesuai dengan isi database.
+        int id_autoIncrement = 0;
+        while(data != null){
+            id_autoIncrement++;
+            StringTokenizer stringToken = new StringTokenizer(data,",");
+
+            System.out.println();
+            System.out.printf("| %2s ",id_autoIncrement);
+            System.out.printf("|\t%-11s\t|",stringToken.nextToken());
+            System.out.printf("\t%s\t|",stringToken.nextToken());
+
+            data = bufferedInput.readLine();
+        }
+
+        //penutup tabel bawah
+        System.out.println();
+        System.out.print("   ");
+        for (int i = 0; i < a.length(); i++){
+            System.out.print("-");
+        }
+        System.out.print("\t ");
+
+    }
+
+    private static void cariData() throws IOException{
+
+    }
+
+    private static void tambahData() throws IOException{
+
+    }
+
+    private static void updateData() throws IOException{
+
+    }
+
+    private static void hapusData() throws IOException{
+
     }
 
 }
