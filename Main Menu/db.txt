@@ -1,5 +1,5 @@
-Nasi Goreng,15000
-Ketupat,15000
-Nasi Uduk,10000
-Gado-gado,15000
-Sop Kambing,45000
+1,Nasi Goreng,15000
+2,Ketupat,15000
+3,Nasi Uduk,10000
+4,Gado-gado,15000
+5,Sop Kambing,45000

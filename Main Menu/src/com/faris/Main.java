@@ -33,6 +33,7 @@ public class Main {
                     break;
                 case "2":
                     System.out.println("CARI MENU");
+                    cariData();
                     break;
                 case "3":
                     System.out.println("TAMBAH MENU");
@@ -90,8 +91,8 @@ public class Main {
             fileInput = new FileReader("db.txt");
             bufferedInput = new BufferedReader(fileInput);
         } catch (Exception e){
-            System.out.println("Database tidak ditemukan");
-            System.out.println("Silakan update data terlebih dahulu");
+            System.out.println("Data tidak ditemukan");
+            System.out.println("Silakan tambah data terlebih dahulu");
             return;
         }
 
@@ -110,13 +111,14 @@ public class Main {
 
 
         //mengambil data sesuai dengan isi database.
-        int id_autoIncrement = 0;
+        int num_autoIncrement = 0;
         while(data != null){
-            id_autoIncrement++;
+            num_autoIncrement++;
             StringTokenizer stringToken = new StringTokenizer(data,",");
 
             System.out.println();
-            System.out.printf("| %2s ",id_autoIncrement);
+            stringToken.nextToken();
+            System.out.printf("| %2s ",num_autoIncrement);
             System.out.printf("|\t%-11s\t|",stringToken.nextToken());
             System.out.printf("\t%s\t|",stringToken.nextToken());
 
@@ -134,6 +136,66 @@ public class Main {
     }
 
     private static void cariData() throws IOException{
+
+        try{
+            File db_file = new File("db.txt");
+        } catch (Exception e){
+            System.out.println("File tidak ada!");
+            System.out.println("Silakan buat file database.");
+            return;
+        }
+
+        Scanner userInputTerminal = new Scanner(System.in);
+        System.out.print("Masukkan keyword: ");
+        String keywordInput = userInputTerminal.nextLine();
+        System.out.println(keywordInput);
+
+        //split whitespace
+        String[] keywords = keywordInput.split("\\s+");
+
+        FileReader fileInput = new FileReader("db.txt");
+        BufferedReader bufferedInput = new BufferedReader(fileInput);
+
+        String data = bufferedInput.readLine();
+        boolean is_exist;
+        int num_autoIncrement = 0;
+
+        String a = "\n| No |\tNama Menu\t|\tHarga\t|";
+        //penutup tabel atas
+        System.out.println(a);
+        System.out.print("+  ");
+        for (int i = 0; i < a.length(); i++){
+            System.out.print("-");
+        }
+        System.out.print("\t+");
+
+        while(data != null){
+            is_exist = true;
+
+            for(String keyword:keywords){
+                is_exist = data.toLowerCase().contains(keyword.toLowerCase());
+            }
+
+            if(is_exist){
+                num_autoIncrement++;
+                StringTokenizer stringToken = new StringTokenizer(data, ",");
+
+                System.out.println();
+                stringToken.nextToken();
+                System.out.printf("| %2s ",num_autoIncrement);
+                System.out.printf("|\t%-11s\t|",stringToken.nextToken());
+                System.out.printf("\t%s\t|",stringToken.nextToken());
+            }
+            data = bufferedInput.readLine();
+        }
+
+        //penutup tabel bawah
+        System.out.println();
+        System.out.print("   ");
+        for (int i = 0; i < a.length(); i++){
+            System.out.print("-");
+        }
+        System.out.print("\t ");
 
     }
 
