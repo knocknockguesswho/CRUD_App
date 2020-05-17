@@ -2,6 +2,7 @@ package com.faris;
 
 import java.util.*;
 import java.io.*;
+import java.lang.*;
 
 public class Main {
     public static void main(String[] args) throws IOException {
@@ -37,6 +38,7 @@ public class Main {
                     break;
                 case "3":
                     System.out.println("TAMBAH MENU");
+                    tambahData();
                     break;
                 case "4":
                     System.out.println("UBAH MENU");
@@ -49,13 +51,11 @@ public class Main {
             }
             //Jika user pilih n maka akan keluar dari program.
 
-            is_continue = getYesOrNo("\nLanjutkan");
+            is_continue = getYesOrNo("\nKe Menu Awal");
 
         } //end-while
 
     }
-
-
 
     private static boolean getYesOrNo(String message){
         Scanner userInputTerminal = new Scanner(System.in);
@@ -67,7 +67,6 @@ public class Main {
             System.out.print(message + " (y/n)? ");
             pilihanUser = userInputTerminal.next();
         }
-
         return pilihanUser.equalsIgnoreCase("y");
     }
 
@@ -81,6 +80,27 @@ public class Main {
         } catch (Exception e){
             System.err.println("Tidak bisa reload");
         }
+    }
+
+    private static boolean dataSudahAda(String[] keywords) throws IOException{
+        FileReader fileInput = new FileReader("db.txt");
+        BufferedReader bufferedReader = new BufferedReader(fileInput);
+        String data = bufferedReader.readLine();
+        boolean is_exist = false;
+
+        while(data != null){
+            is_exist = true;
+
+            for (String keyword:keywords){
+                is_exist = is_exist && data.toLowerCase().contains(keyword.toLowerCase());
+            }
+            if(is_exist){
+                System.err.println("Data sudah ada di database!");
+                break;
+            }
+            data = bufferedReader.readLine();
+        }
+        return is_exist;
     }
 
     private static void tampilkanData() throws IOException{
@@ -99,15 +119,20 @@ public class Main {
         //mengambil data per-baris dr file yg diinput ke BufferedReader
         String data = bufferedInput.readLine();
 
-        String a = "\n| No |\tNama Menu\t|\tHarga\t|";
+        String a = "\n| No |\tJenis Menu\t|\tNama Menu\t|\tHarga\t|";
 
         //penutup tabel atas
-        System.out.println(a);
-        System.out.print("+  ");
+        System.out.print("+ ---");
         for (int i = 0; i < a.length(); i++){
             System.out.print("-");
         }
-        System.out.print("\t+");
+        System.out.print("--\t+");
+        System.out.println(a);
+        System.out.print("+ ---");
+        for (int i = 0; i < a.length(); i++){
+            System.out.print("-");
+        }
+        System.out.print("--\t+");
 
 
         //mengambil data sesuai dengan isi database.
@@ -119,6 +144,7 @@ public class Main {
             System.out.println();
             stringToken.nextToken();
             System.out.printf("| %2s ",num_autoIncrement);
+            System.out.printf("|\t%-10s\t",stringToken.nextToken());
             System.out.printf("|\t%-11s\t|",stringToken.nextToken());
             System.out.printf("\t%s\t|",stringToken.nextToken());
 
@@ -127,11 +153,11 @@ public class Main {
 
         //penutup tabel bawah
         System.out.println();
-        System.out.print("   ");
+        System.out.print("+ ---");
         for (int i = 0; i < a.length(); i++){
             System.out.print("-");
         }
-        System.out.print("\t ");
+        System.out.print("--\t+");
 
     }
 
@@ -160,14 +186,19 @@ public class Main {
         boolean is_exist;
         int num_autoIncrement = 0;
 
-        String a = "\n| No |\tNama Menu\t|\tHarga\t|";
+        String a = "\n| No |\tJenis Menu\t|\tNama Menu\t|\tHarga\t|";
         //penutup tabel atas
-        System.out.println(a);
-        System.out.print("+  ");
+        System.out.print("+ ---");
         for (int i = 0; i < a.length(); i++){
             System.out.print("-");
         }
-        System.out.print("\t+");
+        System.out.print("--\t+");
+        System.out.println(a);
+        System.out.print("+ ---");
+        for (int i = 0; i < a.length(); i++){
+            System.out.print("-");
+        }
+        System.out.print("--\t+");
 
         while(data != null){
             is_exist = true;
@@ -183,6 +214,7 @@ public class Main {
                 System.out.println();
                 stringToken.nextToken();
                 System.out.printf("| %2s ",num_autoIncrement);
+                System.out.printf("|\t%-10s\t",stringToken.nextToken());
                 System.out.printf("|\t%-11s\t|",stringToken.nextToken());
                 System.out.printf("\t%s\t|",stringToken.nextToken());
             }
@@ -191,16 +223,122 @@ public class Main {
 
         //penutup tabel bawah
         System.out.println();
-        System.out.print("   ");
+        System.out.print("+ ---");
         for (int i = 0; i < a.length(); i++){
             System.out.print("-");
         }
-        System.out.print("\t ");
+        System.out.print("--\t+");
 
     }
 
     private static void tambahData() throws IOException{
+        FileWriter fileOutput = new FileWriter("db.txt",true);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileOutput);
 
+
+
+
+        Scanner adminInputTerminal = new Scanner(System.in);
+        String jenisMenu, namaMenu, makanan, minuman;
+        int harga = 0;
+        boolean is_continue = true;
+        String primaryKey;
+
+        //input menu
+        System.out.print("Jenis Menu(makanan/minuman): ");
+        jenisMenu = adminInputTerminal.nextLine();
+        System.out.print("Nama Menu: ");
+        namaMenu = adminInputTerminal.nextLine();
+        boolean hargaBenar = false;
+        while(!hargaBenar){
+            try{
+                System.out.print("Harga(digit): ");
+                harga = adminInputTerminal.nextInt();
+                hargaBenar = true;
+            } catch (InputMismatchException e){
+                adminInputTerminal.next();
+                System.out.println("\nMASUKKAN ANGKA!");
+            }
+        }
+
+        String[] keywords = {jenisMenu+','+namaMenu+","+harga};
+        String hargaString = Integer.toString(harga);
+        String[] keyword = {jenisMenu,namaMenu,hargaString};
+        boolean dataSudahAda = dataSudahAda(keywords);
+        makanan = jenisMenu;
+        minuman = jenisMenu;
+        int nomorId = urutanPrimaryKey(jenisMenu) + 1;
+
+
+        //tampilkan data yg akan dimasukkan ke database
+        if(!dataSudahAda){
+            System.out.println("\nAkan Ditambahkan "+"\n-----------------"+"\nJenis Menu\t: "+ keyword[0] + " "+"\nNama Menu\t: " + keyword[1] + " "+"\nHarga\t\t: " + keyword[2]);
+
+            is_continue = getYesOrNo("\nPastikan data sudah benar.\nINPUT DATA KE DATABASE?");
+
+            if (is_continue){
+                switch (jenisMenu){
+                    case "makanan":
+                        makanan = jenisMenu.replace("makanan","f");
+                        primaryKey = String.format("%s_%03d",makanan,nomorId);
+                        bufferedWriter.write(primaryKey+","+jenisMenu+","+namaMenu+","+harga);
+                        bufferedWriter.newLine();
+                        bufferedWriter.flush();
+                        System.out.println("INPUT BERHASIL!");
+                        break;
+                    case "minuman":
+                        minuman = jenisMenu.replace("minuman","b");
+                        primaryKey = String.format("%s_%03d",minuman,nomorId);
+                        System.out.println("INPUT BERHASIL!");
+                        bufferedWriter.write(primaryKey+","+jenisMenu+","+namaMenu+","+harga);
+                        bufferedWriter.newLine();
+                        bufferedWriter.flush();
+                        break;
+                }
+            } else {
+                System.err.println("INPUT DATA DIBATALKAN.");
+            }
+        }
+
+        bufferedWriter.close();
+
+    }
+
+    private static int urutanPrimaryKey(String jenisMenu) throws IOException{
+        FileReader fileInput = new FileReader("db.txt");
+        BufferedReader bufferedReader = new BufferedReader(fileInput);
+
+        String data = bufferedReader.readLine();
+        Scanner dataScan;
+        String primaryKey;
+        int nomorId = 0;
+        String makanan = jenisMenu;
+        String minuman = jenisMenu;
+
+        while(data != null){
+            dataScan = new Scanner(data);
+            dataScan.useDelimiter(",");
+            primaryKey = dataScan.next();
+            dataScan = new Scanner(primaryKey);
+            dataScan.useDelimiter("_");
+
+            switch (jenisMenu){
+                case "makanan":
+                    makanan = jenisMenu.replace("makanan","f");
+                    primaryKey = String.format("%s_%03d",makanan,nomorId);
+                    break;
+                case "minuman":
+                    minuman = jenisMenu.replace("minuman","b");
+                    primaryKey = String.format("%s_%03d",minuman,nomorId);
+                    break;
+            }
+
+            if (makanan.equalsIgnoreCase(dataScan.next()) || minuman.equalsIgnoreCase(dataScan.next())){
+                nomorId = dataScan.nextInt();
+            }
+            data = bufferedReader.readLine();
+        }
+        return nomorId;
     }
 
     private static void updateData() throws IOException{

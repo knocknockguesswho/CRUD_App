@@ -1,5 +1,7 @@
-1,Nasi Goreng,15000
-2,Ketupat,15000
-3,Nasi Uduk,10000
-4,Gado-gado,15000
-5,Sop Kambing,45000
+f_001,makanan,nasi goreng,15000
+f_002,makanan,ketupat,15000
+f_003,makanan,nasi uduk,10000
+f_004,makanan,gado-gado,15000
+f_005,makanan,sop kambing,45000
+b_001,minuman,es teh,5000
+f_006,makanan,rendang,30000
