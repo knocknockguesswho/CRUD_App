@@ -86,13 +86,21 @@ public class Main {
         FileReader fileInput = new FileReader("db.txt");
         BufferedReader bufferedReader = new BufferedReader(fileInput);
         String data = bufferedReader.readLine();
+//        Scanner data_scan;
+//        String nama_menu;
+//        data_scan = new Scanner(data);
+//        data_scan.useDelimiter(",");
+//        nama_menu = data_scan.next();
+//        nama_menu = data_scan.next();
+//        nama_menu = data_scan.next();
+
         boolean is_exist = false;
 
         while(data != null){
             is_exist = true;
 
-            for (String keyword:keywords){
-                is_exist = is_exist && data.toLowerCase().contains(keyword.toLowerCase());
+            for (int i = 0; i < data.length();i++){
+                is_exist = is_exist && data.toLowerCase().contains(keywords[1].toLowerCase());
             }
             if(is_exist){
                 System.err.println("Data sudah ada di database!");
@@ -261,10 +269,10 @@ public class Main {
             }
         }
 
-        String[] keywords = {jenisMenu+','+namaMenu+","+harga};
+//        String[] keywords = {jenisMenu+','+namaMenu+","+harga};
         String hargaString = Integer.toString(harga);
         String[] keyword = {jenisMenu,namaMenu,hargaString};
-        boolean dataSudahAda = dataSudahAda(keywords);
+        boolean dataSudahAda = dataSudahAda(keyword);
         makanan = jenisMenu;
         minuman = jenisMenu;
         int nomorId = urutanPrimaryKey(jenisMenu) + 1;

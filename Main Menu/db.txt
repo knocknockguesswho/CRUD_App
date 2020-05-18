@@ -5,3 +5,5 @@ f_004,makanan,gado-gado,15000
 f_005,makanan,sop kambing,45000
 b_001,minuman,es teh,5000
 f_006,makanan,rendang,30000
+f_007,makanan,nasi kebuli,50000
+f_008,makanan,nasi lemak,20000
