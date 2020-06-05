@@ -11,7 +11,7 @@ public class Main {
         String pilihanUser;
         boolean is_continue = true;
 
-        while(is_continue){
+        while (is_continue) {
 
             //Reload
             clearScreen();
@@ -22,12 +22,13 @@ public class Main {
             System.out.println("3.\tTambah Menu");
             System.out.println("4.\tUbah Menu");
             System.out.println("5.\tHapus Menu");
+            System.out.println("0.\tKeluar");
 
             System.out.print("\n\nPilih (1~5): ");
             pilihanUser = userInputTerminal.next();
 
             //switch with input string
-            switch (pilihanUser){
+            switch (pilihanUser) {
                 case "1":
                     System.out.println("DAFTAR MENU");
                     tampilkanData();
@@ -42,9 +43,14 @@ public class Main {
                     break;
                 case "4":
                     System.out.println("UBAH MENU");
+                    updateData();
                     break;
                 case "5":
                     System.out.println("HAPUS MENU");
+                    hapusData();
+                    break;
+                case "0":
+                    System.out.println("KELUAR");
                     break;
                 default:
                     System.err.println("INPUT SALAH!\n");
@@ -57,12 +63,12 @@ public class Main {
 
     }
 
-    private static boolean getYesOrNo(String message){
+    private static boolean getYesOrNo(String message) {
         Scanner userInputTerminal = new Scanner(System.in);
         System.out.print(message + " (y/n)? ");
         String pilihanUser = userInputTerminal.next();
 
-        while(!pilihanUser.equalsIgnoreCase("y") && !pilihanUser.equalsIgnoreCase("n")){
+        while (!pilihanUser.equalsIgnoreCase("y") && !pilihanUser.equalsIgnoreCase("n")) {
             System.out.println("\npilihan anda salah!");
             System.out.print(message + " (y/n)? ");
             pilihanUser = userInputTerminal.next();
@@ -70,19 +76,19 @@ public class Main {
         return pilihanUser.equalsIgnoreCase("y");
     }
 
-    private static void clearScreen(){
+    private static void clearScreen() {
         try {
-            if (System.getProperty("os.name").contains("Windows")){
-                new ProcessBuilder("cmd","/c","cls").inheritIO().start().waitFor();
+            if (System.getProperty("os.name").contains("Windows")) {
+                new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
             } else {
                 System.out.print("\033\143");
             }
-        } catch (Exception e){
+        } catch (Exception e) {
             System.err.println("Tidak bisa reload");
         }
     }
 
-    private static boolean dataSudahAda(String[] keywords) throws IOException{
+    private static boolean dataSudahAda(String[] keywords) throws IOException {
         FileReader fileInput = new FileReader("db.txt");
         BufferedReader bufferedReader = new BufferedReader(fileInput);
         String data = bufferedReader.readLine();
@@ -96,13 +102,13 @@ public class Main {
 
         boolean is_exist = false;
 
-        while(data != null){
+        while (data != null) {
             is_exist = true;
 
-            for (int i = 0; i < data.length();i++){
+            for (int i = 0; i < data.length(); i++) {
                 is_exist = is_exist && data.toLowerCase().contains(keywords[1].toLowerCase());
             }
-            if(is_exist){
+            if (is_exist) {
                 System.err.println("Data sudah ada di database!");
                 break;
             }
@@ -111,14 +117,14 @@ public class Main {
         return is_exist;
     }
 
-    private static void tampilkanData() throws IOException{
+    private static void tampilkanData() throws IOException {
         FileReader fileInput;
         BufferedReader bufferedInput;
 
         try {
             fileInput = new FileReader("db.txt");
             bufferedInput = new BufferedReader(fileInput);
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("Data tidak ditemukan");
             System.out.println("Silakan tambah data terlebih dahulu");
             return;
@@ -126,54 +132,62 @@ public class Main {
 
         //mengambil data per-baris dr file yg diinput ke BufferedReader
         String data = bufferedInput.readLine();
+        String num, jenisMenu, namaMenu, harga;
+        num = "No";
+        jenisMenu = "Jenis Menu";
+        namaMenu = "Nama Menu";
+        harga = "Harga";
 
-        String a = "\n| No |\tJenis Menu\t|\tNama Menu\t|\tHarga\t|";
 
+        String a = String.format("\n| %2s |\t%-10s\t|\t%-11s\t|\t%s\t|", num, jenisMenu, namaMenu, harga);
+        char[] a_total = a.toCharArray();
         //penutup tabel atas
-        System.out.print("+ ---");
-        for (int i = 0; i < a.length(); i++){
+        System.out.print("+");
+        for (int i = -21; i < a_total.length; i++) {
             System.out.print("-");
         }
-        System.out.print("--\t+");
-        System.out.println(a);
-        System.out.print("+ ---");
-        for (int i = 0; i < a.length(); i++){
+        System.out.print("+");
+
+        System.out.println(a);//print nama colom
+
+        System.out.print("+");
+        for (int i = -21; i < a_total.length; i++) {
             System.out.print("-");
         }
-        System.out.print("--\t+");
+        System.out.print("+");
 
 
         //mengambil data sesuai dengan isi database.
         int num_autoIncrement = 0;
-        while(data != null){
+        while (data != null) {
             num_autoIncrement++;
-            StringTokenizer stringToken = new StringTokenizer(data,",");
+            StringTokenizer stringToken = new StringTokenizer(data, ",");
 
             System.out.println();
             stringToken.nextToken();
-            System.out.printf("| %2s ",num_autoIncrement);
-            System.out.printf("|\t%-10s\t",stringToken.nextToken());
-            System.out.printf("|\t%-11s\t|",stringToken.nextToken());
-            System.out.printf("\t%s\t|",stringToken.nextToken());
+            System.out.printf("| %2s ", num_autoIncrement);
+            System.out.printf("|\t%-10s\t", stringToken.nextToken());
+            System.out.printf("|\t%-11s\t|", stringToken.nextToken());
+            System.out.printf("\t%s\t|", stringToken.nextToken());
 
             data = bufferedInput.readLine();
         }
 
         //penutup tabel bawah
         System.out.println();
-        System.out.print("+ ---");
-        for (int i = 0; i < a.length(); i++){
+        System.out.print("+");
+        for (int i = -21; i < a.length(); i++) {
             System.out.print("-");
         }
-        System.out.print("--\t+");
+        System.out.print("+");
 
     }
 
-    private static void cariData() throws IOException{
+    private static void cariData() throws IOException {
 
-        try{
+        try {
             File db_file = new File("db.txt");
-        } catch (Exception e){
+        } catch (Exception e) {
             System.out.println("File tidak ada!");
             System.out.println("Silakan buat file database.");
             return;
@@ -193,57 +207,63 @@ public class Main {
         String data = bufferedInput.readLine();
         boolean is_exist;
         int num_autoIncrement = 0;
+        String num, jenisMenu, namaMenu, harga;
+        num = "No";
+        jenisMenu = "Jenis Menu";
+        namaMenu = "Nama Menu";
+        harga = "Harga";
 
-        String a = "\n| No |\tJenis Menu\t|\tNama Menu\t|\tHarga\t|";
+        //a adalah variabel dummy, hanya untuk menampung, tidak eksplisit.
+        String a = String.format("\n| %2s |\t%-10s\t|\t%-11s\t|\t%s\t|", num, jenisMenu, namaMenu, harga);
+        char[] a_total = a.toCharArray();
         //penutup tabel atas
-        System.out.print("+ ---");
-        for (int i = 0; i < a.length(); i++){
+        System.out.print("+");
+        for (int i = -21; i < a_total.length; i++) {
             System.out.print("-");
         }
-        System.out.print("--\t+");
-        System.out.println(a);
-        System.out.print("+ ---");
-        for (int i = 0; i < a.length(); i++){
-            System.out.print("-");
-        }
-        System.out.print("--\t+");
+        System.out.print("+");
 
-        while(data != null){
+        System.out.println(a);//print nama colom
+
+        System.out.print("+");
+        for (int i = -21; i < a_total.length; i++) {
+            System.out.print("-");
+        }
+        System.out.print("+");
+
+        while (data != null) {
             is_exist = true;
 
-            for(String keyword:keywords){
+            for (String keyword : keywords) {
                 is_exist = data.toLowerCase().contains(keyword.toLowerCase());
             }
 
-            if(is_exist){
+            if (is_exist) {
                 num_autoIncrement++;
                 StringTokenizer stringToken = new StringTokenizer(data, ",");
 
                 System.out.println();
                 stringToken.nextToken();
-                System.out.printf("| %2s ",num_autoIncrement);
-                System.out.printf("|\t%-10s\t",stringToken.nextToken());
-                System.out.printf("|\t%-11s\t|",stringToken.nextToken());
-                System.out.printf("\t%s\t|",stringToken.nextToken());
+                System.out.printf("| %2s ", num_autoIncrement);
+                System.out.printf("|\t%-10s\t", stringToken.nextToken());
+                System.out.printf("|\t%-11s\t|", stringToken.nextToken());
+                System.out.printf("\t%s\t|", stringToken.nextToken());
             }
             data = bufferedInput.readLine();
         }
 
         //penutup tabel bawah
         System.out.println();
-        System.out.print("+ ---");
-        for (int i = 0; i < a.length(); i++){
+        System.out.print("+");
+        for (int i = -21; i < a.length(); i++) {
             System.out.print("-");
         }
-        System.out.print("--\t+");
-
+        System.out.print("+");
     }
 
-    private static void tambahData() throws IOException{
-        FileWriter fileOutput = new FileWriter("db.txt",true);
+    private static void tambahData() throws IOException {
+        FileWriter fileOutput = new FileWriter("db.txt", true);
         BufferedWriter bufferedWriter = new BufferedWriter(fileOutput);
-
-
 
 
         Scanner adminInputTerminal = new Scanner(System.in);
@@ -258,12 +278,12 @@ public class Main {
         System.out.print("Nama Menu: ");
         namaMenu = adminInputTerminal.nextLine();
         boolean hargaBenar = false;
-        while(!hargaBenar){
-            try{
+        while (!hargaBenar) {
+            try {
                 System.out.print("Harga(digit): ");
                 harga = adminInputTerminal.nextInt();
                 hargaBenar = true;
-            } catch (InputMismatchException e){
+            } catch (InputMismatchException e) {
                 adminInputTerminal.next();
                 System.out.println("\nMASUKKAN ANGKA!");
             }
@@ -271,7 +291,7 @@ public class Main {
 
 //        String[] keywords = {jenisMenu+','+namaMenu+","+harga};
         String hargaString = Integer.toString(harga);
-        String[] keyword = {jenisMenu,namaMenu,hargaString};
+        String[] keyword = {jenisMenu, namaMenu, hargaString};
         boolean dataSudahAda = dataSudahAda(keyword);
         makanan = jenisMenu;
         minuman = jenisMenu;
@@ -279,26 +299,26 @@ public class Main {
 
 
         //tampilkan data yg akan dimasukkan ke database
-        if(!dataSudahAda){
-            System.out.println("\nAkan Ditambahkan "+"\n-----------------"+"\nJenis Menu\t: "+ keyword[0] + " "+"\nNama Menu\t: " + keyword[1] + " "+"\nHarga\t\t: " + keyword[2]);
+        if (!dataSudahAda) {
+            System.out.println("\nAkan Ditambahkan " + "\n-----------------" + "\nJenis Menu\t: " + keyword[0] + " " + "\nNama Menu\t: " + keyword[1] + " " + "\nHarga\t\t: " + keyword[2]);
 
             is_continue = getYesOrNo("\nPastikan data sudah benar.\nINPUT DATA KE DATABASE?");
 
-            if (is_continue){
-                switch (jenisMenu){
+            if (is_continue) {
+                switch (jenisMenu) {
                     case "makanan":
-                        makanan = jenisMenu.replace("makanan","f");
-                        primaryKey = String.format("%s_%03d",makanan,nomorId);
-                        bufferedWriter.write(primaryKey+","+jenisMenu+","+namaMenu+","+harga);
+                        makanan = jenisMenu.replace("makanan", "f");
+                        primaryKey = String.format("%s_%03d", makanan, nomorId);
+                        bufferedWriter.write(primaryKey + "," + jenisMenu + "," + namaMenu + "," + harga);
                         bufferedWriter.newLine();
                         bufferedWriter.flush();
                         System.out.println("INPUT BERHASIL!");
                         break;
                     case "minuman":
-                        minuman = jenisMenu.replace("minuman","b");
-                        primaryKey = String.format("%s_%03d",minuman,nomorId);
+                        minuman = jenisMenu.replace("minuman", "b");
+                        primaryKey = String.format("%s_%03d", minuman, nomorId);
                         System.out.println("INPUT BERHASIL!");
-                        bufferedWriter.write(primaryKey+","+jenisMenu+","+namaMenu+","+harga);
+                        bufferedWriter.write(primaryKey + "," + jenisMenu + "," + namaMenu + "," + harga);
                         bufferedWriter.newLine();
                         bufferedWriter.flush();
                         break;
@@ -312,7 +332,7 @@ public class Main {
 
     }
 
-    private static int urutanPrimaryKey(String jenisMenu) throws IOException{
+    private static int urutanPrimaryKey(String jenisMenu) throws IOException {
         FileReader fileInput = new FileReader("db.txt");
         BufferedReader bufferedReader = new BufferedReader(fileInput);
 
@@ -323,25 +343,25 @@ public class Main {
         String makanan = jenisMenu;
         String minuman = jenisMenu;
 
-        while(data != null){
+        while (data != null) {
             dataScan = new Scanner(data);
             dataScan.useDelimiter(",");
             primaryKey = dataScan.next();
             dataScan = new Scanner(primaryKey);
             dataScan.useDelimiter("_");
 
-            switch (jenisMenu){
+            switch (jenisMenu) {
                 case "makanan":
-                    makanan = jenisMenu.replace("makanan","f");
-                    primaryKey = String.format("%s_%03d",makanan,nomorId);
+                    makanan = jenisMenu.replace("makanan", "f");
+                    primaryKey = String.format("%s_%03d", makanan, nomorId);
                     break;
                 case "minuman":
-                    minuman = jenisMenu.replace("minuman","b");
-                    primaryKey = String.format("%s_%03d",minuman,nomorId);
+                    minuman = jenisMenu.replace("minuman", "b");
+                    primaryKey = String.format("%s_%03d", minuman, nomorId);
                     break;
             }
 
-            if (makanan.equalsIgnoreCase(dataScan.next()) || minuman.equalsIgnoreCase(dataScan.next())){
+            if (makanan.equalsIgnoreCase(dataScan.next()) || minuman.equalsIgnoreCase(dataScan.next())) {
                 nomorId = dataScan.nextInt();
             }
             data = bufferedReader.readLine();
@@ -349,12 +369,89 @@ public class Main {
         return nomorId;
     }
 
-    private static void updateData() throws IOException{
+    private static void hapusData() throws IOException {
+
+        //Ambil original database
+        //dengan catatan temporary db akan direname
+        File database = new File("db.txt");
+        FileReader fileReader = new FileReader(database);
+        BufferedReader bufferedReader = new BufferedReader(fileReader);
+
+        //Buat temporary database
+        File tmp_db = new File("temp_db.txt");
+        FileWriter fileWriter = new FileWriter(tmp_db);
+        BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
+
+        //Tampilkan data yg ada di database asli
+        tampilkanData();
+
+        //User/admin input 'data yg akan didelete'
+        Scanner adminInputTerminal = new Scanner(System.in);
+        System.out.print("\n\nPilih 'Nomor' yang akan dihapus: ");
+        int deleteNum = adminInputTerminal.nextInt();
+
+        //Buat loop untuk membaca tiap baris database
+        //lalu skip 'data yg akan didelete'.
+        int dataCount = 0;
+        String data = bufferedReader.readLine();
+
+        StringTokenizer st = new StringTokenizer(data, ",");
+
+
+        while (data != null) {
+            dataCount++;
+            boolean is_delete = false;
+
+            StringTokenizer stringTokenizer = new StringTokenizer(data, ",");
+
+            //Verifikasi data yg akan dihapus
+            //While() akan loop hingga sampai ke data yg diinginkan
+            if (deleteNum == dataCount) {
+                String primaryKey = stringTokenizer.nextToken();
+                String jenisMenu = stringTokenizer.nextToken();
+                String namaMenu = stringTokenizer.nextToken();
+                String harga = stringTokenizer.nextToken();
+                System.out.println("\nAkan Dihapus " + "\n-----------------" + "\nJenis Menu\t: " + jenisMenu + " " + "\nNama Menu\t: " + namaMenu + " " + "\nHarga\t\t: " + harga);
+
+                is_delete = getYesOrNo("\nHAPUS DATA INI");
+            }
+
+
+            //jika true maka masuk ke sini
+            if (is_delete) {
+                //pengecualian ada disini (data yg true)
+                System.out.println("\nBERHASIL DIHAPUS!");
+            } else {
+                //Data yg dipindahkan ke tmp,
+                //data selain yg dikecualikan di atas
+                bufferedWriter.write(data);
+                bufferedWriter.newLine();
+            }
+            data = bufferedReader.readLine();
+        }
+        bufferedWriter.flush();
+
+        bufferedReader.close();
+        fileReader.close();
+        bufferedWriter.close();
+        fileWriter.close();
+
+        System.gc();
+
+        //Hapus db dan rename temp_db
+        database.delete();
+        tmp_db.renameTo(database);
+
+        //Update primaryKey, urutkan ulang.
+        //karena ada data yg terhapus.
 
     }
 
-    private static void hapusData() throws IOException{
+    private static void updateData() throws IOException {
+    }
+    private static void updatePrimKey() throws IOException{
 
     }
+
 
 }
