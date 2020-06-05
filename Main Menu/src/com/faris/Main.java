@@ -143,7 +143,7 @@ public class Main {
         char[] a_total = a.toCharArray();
         //penutup tabel atas
         System.out.print("+");
-        for (int i = -21; i < a_total.length; i++) {
+        for (double i = a_total.length*-0.1; i < a_total.length; i++) {
             System.out.print("-");
         }
         System.out.print("+");
@@ -151,7 +151,7 @@ public class Main {
         System.out.println(a);//print nama colom
 
         System.out.print("+");
-        for (int i = -21; i < a_total.length; i++) {
+        for (double i = a_total.length*-0.1; i < a_total.length; i++) {
             System.out.print("-");
         }
         System.out.print("+");
@@ -176,7 +176,7 @@ public class Main {
         //penutup tabel bawah
         System.out.println();
         System.out.print("+");
-        for (int i = -21; i < a.length(); i++) {
+        for (double i = a_total.length*-0.1; i < a_total.length; i++) {
             System.out.print("-");
         }
         System.out.print("+");
@@ -218,7 +218,7 @@ public class Main {
         char[] a_total = a.toCharArray();
         //penutup tabel atas
         System.out.print("+");
-        for (int i = -21; i < a_total.length; i++) {
+        for (double i = a_total.length*-0.1; i < a_total.length; i++) {
             System.out.print("-");
         }
         System.out.print("+");
@@ -226,7 +226,7 @@ public class Main {
         System.out.println(a);//print nama colom
 
         System.out.print("+");
-        for (int i = -21; i < a_total.length; i++) {
+        for (double i = a_total.length*-0.1; i < a_total.length; i++) {
             System.out.print("-");
         }
         System.out.print("+");
@@ -255,7 +255,7 @@ public class Main {
         //penutup tabel bawah
         System.out.println();
         System.out.print("+");
-        for (int i = -21; i < a.length(); i++) {
+        for (double i = a_total.length*-0.1; i < a_total.length; i++) {
             System.out.print("-");
         }
         System.out.print("+");
